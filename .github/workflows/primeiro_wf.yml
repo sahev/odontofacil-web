@@ -23,6 +23,7 @@ jobs:
 
   deploy-dev:
     name: deploy-dev
+    needs: build
     runs-on: ubuntu-latest
     steps:
     - name: ls -a via ssh
