@@ -12,8 +12,8 @@ jobs:
       uses: fifsky/ssh-action@master
       with:
         command: |
-          cd /var/home/sites
           git pull
+          ls
           whoami
 
         host: ${{ vars.HOST }}
