@@ -21,7 +21,7 @@ jobs:
         user: ${{ vars.USERNAME }}
         key: ${{ secrets.SECRET_KEY }}
 
-build:
+  deploy-dev:
     name: deploy-dev
     runs-on: ubuntu-latest
     steps:
