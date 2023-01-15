@@ -32,11 +32,8 @@ jobs:
       uses: fifsky/ssh-action@master
       with:
         command: |
-          printf "\n\n updating docker image *** ...."
-          docker pull ${{ github.event.repository.name }}
-
           printf "\n\n starting docker server on port *** ...."
-          docker run -p 8282:8080 ${{ github.event.repository.name }}
+          docker run -p 8282:8080 ${{ github.event.repository.name }}:latest
 
         host: ${{ vars.HOST }}
         user: ${{ vars.USERNAME }}
