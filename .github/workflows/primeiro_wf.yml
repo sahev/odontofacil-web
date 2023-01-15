@@ -5,15 +5,31 @@ on:
 jobs:
 
   build:
-    name: Build
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Update repository
+      uses: fifsky/ssh-action@master
+      with:
+        command: |
+          whoami
+          cd ${{ github.event.repository.name }}
+          git pull
+          docker build -t ${{ github.event.repository.name }} .
+
+        host: ${{ vars.HOST }}
+        user: ${{ vars.USERNAME }}
+        key: ${{ secrets.SECRET_KEY }}
+
+build:
+    name: deploy-dev
     runs-on: ubuntu-latest
     steps:
     - name: ls -a via ssh
       uses: fifsky/ssh-action@master
       with:
         command: |
-          cd ${{ github.event.repository.name }}
-          whoami
+          docker run -p 82:8080 ${{ github.event.repository.name }}
 
         host: ${{ vars.HOST }}
         user: ${{ vars.USERNAME }}
