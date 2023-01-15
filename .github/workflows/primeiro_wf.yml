@@ -8,6 +8,8 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
+    - name: outro step 
+      run: curl -v telnet://${{ secrets.HOST }}:${{ secrets.PORT }}
     - name: executing remote ssh commands using password
       uses: appleboy/ssh-action@master
       with:
@@ -16,4 +18,4 @@ jobs:
         key: ${{ secrets.SECRET_KEY }}
         port: ${{ secrets.PORT }}
         script: whoami
-      run: curl -v telnet://${{ secrets.HOST }}:${{ secrets.PORT }}
+    
