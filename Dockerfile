@@ -16,4 +16,4 @@ RUN npm run build
 
 EXPOSE 3434
 
-CMD [ "http-server", "dist" ]
+CMD [ "http-server", "dist", "--proxy", "http://localhost:8080?" ]
