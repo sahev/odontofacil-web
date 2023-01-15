@@ -33,7 +33,7 @@ jobs:
       with:
         command: |
           printf "\n\n starting docker server on port *** ...."
-          docker run -p 8282:8080 ${{ github.event.repository.name }}:latest
+          docker run -d -p 8282:8080 --name containerdev --restart=always ${{ github.event.repository.name }}:latest
 
         host: ${{ vars.HOST }}
         user: ${{ vars.USERNAME }}
