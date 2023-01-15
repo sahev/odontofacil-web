@@ -16,4 +16,3 @@ jobs:
         key: ${{ secrets.SECRET_KEY }}
         port: ${{ vars.PORT }}
         script: whoami
-    
