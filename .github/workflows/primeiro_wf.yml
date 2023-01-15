@@ -12,20 +12,9 @@ jobs:
       uses: fifsky/ssh-action@master
       with:
         command: |
-          cd odontofacil-web
-          git pull
-          ls
+          cd ${{ github.event.repository.name }}
           whoami
 
         host: ${{ vars.HOST }}
         user: ${{ vars.USERNAME }}
         key: ${{ secrets.SECRET_KEY }}
-    # - name: executing remote ssh commands using password
-    #   uses: appleboy/ssh-action@v0.1.7
-    #   with:
-    #     host: ${{ vars.HOST }}
-    #     username: ${{ vars.USERNAME }}
-    #     key: ${{ secrets.SECRET_KEY }}
-    #     port: ${{ vars.PORT }}
-    #     script: whoami
-
