@@ -12,7 +12,10 @@ jobs:
       uses: fifsky/ssh-action@master
       with:
         command: |
+          cd /var/home/sites
+          git pull
           whoami
+
         host: ${{ vars.HOST }}
         user: ${{ vars.USERNAME }}
         key: ${{ secrets.SECRET_KEY }}
