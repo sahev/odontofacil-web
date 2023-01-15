@@ -12,6 +12,7 @@ jobs:
       uses: fifsky/ssh-action@master
       with:
         command: |
+          cd odontofacil-web
           git pull
           ls
           whoami
