@@ -16,6 +16,7 @@ jobs:
           printf "\n\n updating repository...."
           git pull
           
+          echo "ServerAliveInterval 60" >> ~/.ssh/config 
           printf "\n\n generating docker image...."
           docker build -t ${{ github.event.repository.name }} .
 
