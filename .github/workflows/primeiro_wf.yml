@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: outro step 
-      run: curl -v telnet://${{ secrets.HOST }}:${{ secrets.PORT }}
+      run: curl -v telnet://150.230.79.188:22
     - name: executing remote ssh commands using password
       uses: appleboy/ssh-action@master
       with:
