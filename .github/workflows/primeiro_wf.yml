@@ -12,9 +12,11 @@ jobs:
       uses: fifsky/ssh-action@master
       with:
         command: |
-          whoami
           cd ${{ github.event.repository.name }}
+          printf "\n\n updating repository...."
           git pull
+          
+          printf "\n\n generating docker image...."
           docker build -t ${{ github.event.repository.name }} .
 
         host: ${{ vars.HOST }}
@@ -30,7 +32,11 @@ jobs:
       uses: fifsky/ssh-action@master
       with:
         command: |
-          docker run -p 82:8080 ${{ github.event.repository.name }}
+          printf "\n\n updating docker image *** ...."
+          docker pull ${{ github.event.repository.name }}
+
+          printf "\n\n starting docker server on port *** ...."
+          docker run -p 8282:8080 ${{ github.event.repository.name }}
 
         host: ${{ vars.HOST }}
         user: ${{ vars.USERNAME }}
