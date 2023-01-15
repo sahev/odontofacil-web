@@ -17,6 +17,10 @@ jobs:
           git pull
           
           echo "ServerAliveInterval 60" >> ~/.ssh/config 
+          
+          docker stop containerdev
+          docker rm containerdev
+
           printf "\n\n generating docker image...."
           docker build -t ${{ github.event.repository.name }} .
 
