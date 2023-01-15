@@ -12,7 +12,7 @@ jobs:
       uses: fifsky/ssh-action@master
       with:
         command: |
-          whoami
+          sudo whoami
         host: ${{ vars.HOST }}
         user: ${{ vars.USERNAME }}
         key: ${{ secrets.SECRET_KEY}}
