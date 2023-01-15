@@ -14,8 +14,8 @@ jobs:
         command: |
           sudo whoami
         host: ${{ vars.HOST }}
-        user: root
-        password: Pardamuca@1
+        user: ${{ vars.USERNAME }}
+        key: ${{ secrets.SECRET_KEY}}
     - name: executing remote ssh commands using password
       uses: appleboy/ssh-action@v0.1.7
       with:
