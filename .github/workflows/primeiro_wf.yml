@@ -13,8 +13,6 @@ jobs:
       with:
         command: |
           whoami
-          cd /tmp
-          ls -a
         host: ${{ vars.HOST }}
         user: ${{ vars.USERNAME }}
         key: ${{ secrets.SECRET_KEY}}
