@@ -22,6 +22,8 @@ jobs:
           OLD_IMAGE_ID=$(docker container ls --format='{{.Image}}' -f name=containerdev)
           echo "::set-output name=OLD_IMAGE_ID::$OLD_IMAGE_ID"
 
+          echo "OLD_IMAGE_ID: ${{ steps.checkout.outputs.OLD_IMAGE_ID }}"
+
         host: ${{ vars.HOST }}
         user: ${{ vars.SSH_USER }}
         key: ${{ secrets.SECRET_KEY }}
@@ -54,6 +56,8 @@ jobs:
     name: deploy-dev
     needs: build
     runs-on: ubuntu-latest
+    run: |
+      echo "OLD_IMAGE_ID: ${{ steps.checkout.outputs.OLD_IMAGE_ID }}"
     environment: 
       name: development
       url: http://${{ vars.HOST }}:${{ vars.EXTERNAL_APP_PORT }}/
