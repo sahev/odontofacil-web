@@ -11,6 +11,7 @@ jobs:
       name: development
     steps:
     - name: Updating repository
+      id: checkout
       uses: fifsky/ssh-action@master
       with:
         command: |
@@ -18,14 +19,14 @@ jobs:
           printf "\n\n updating repository....\n\n "
           git reset --hard origin/develop
           git pull origin develop
-          echo "OLD_IMAGE_ID=$(docker container ls --format='{{.Image}}' -f name=containerdev)" >> $GITHUB_ENV
+          echo "OLD_IMAGE_ID=$(docker container ls --format='{{.Image}}' -f name=containerdev)" >> $GITHUB_OUTPUT
 
         host: ${{ vars.HOST }}
         user: ${{ vars.SSH_USER }}
         key: ${{ secrets.SECRET_KEY }}
     - name: image id
       run: |
-        echo "${{ env.OLD_IMAGE_ID }}"
+        echo "${{ steps.checkout.outputs.OLD_IMAGE_ID }}"
 
 
   build:
