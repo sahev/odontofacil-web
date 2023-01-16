@@ -7,6 +7,8 @@ jobs:
   update:
     name: updating-repository
     runs-on: ubuntu-latest
+    environment: 
+      name: development
     steps:
     - name: Updating repository
       uses: fifsky/ssh-action@master
@@ -24,6 +26,8 @@ jobs:
     name: build
     needs: update
     runs-on: ubuntu-latest
+    environment: 
+      name: development
     steps:
     - name: building image
       uses: fifsky/ssh-action@master
@@ -45,6 +49,8 @@ jobs:
     name: deploy-dev
     needs: build
     runs-on: ubuntu-latest
+    environment: 
+      name: development
     steps:
     - name: starting server
       uses: fifsky/ssh-action@master
