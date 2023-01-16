@@ -14,7 +14,7 @@ jobs:
       uses: fifsky/ssh-action@master
       with:
         command: |
-          cd ${{ github.event.repository.name }}
+          cd dev/${{ github.event.repository.name }}
           printf "\n\n updating repository....\n\n "
           git pull
 
@@ -33,8 +33,7 @@ jobs:
       uses: fifsky/ssh-action@master
       with:
         command: |
-          cd ${{ github.event.repository.name }}
-          echo "ServerAliveInterval 60" >> ~/.ssh/config 
+          cd dev/${{ github.event.repository.name }}
 
           printf "\n\n generating docker image....\n\n "
           docker build -t ${{ github.event.repository.name }} .
@@ -56,7 +55,7 @@ jobs:
         command: |
           docker stop containerdev
           docker rm containerdev
-          
+
           printf "\n\n starting docker server on port ${{ vars.INTERNAL_APP_PORT }} ....\n\n "
           docker run -d -p ${{ vars.INTERNAL_APP_PORT }}:8080 --name containerdev --restart=always ${{ github.event.repository.name }}:latest
 
