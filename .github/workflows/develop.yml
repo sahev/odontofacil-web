@@ -7,8 +7,6 @@ jobs:
   update:
     name: checkout
     runs-on: ubuntu-latest
-    env: 
-      OLD_IMAGE_ID: ""
     environment: 
       name: development
     steps:
@@ -21,6 +19,7 @@ jobs:
           printf "\n\n updating repository....\n\n "
           git reset --hard origin/develop
           git pull origin develop
+          echo "teste $(docker container ls --format='{{.Image}}' -f name=containerdev)"
           echo "$(docker container ls --format='{{.Image}}' -f name=containerdev)" >> $env.OLD_IMAGE_ID
           echo "my env: ${{ env.OLD_IMAGE_ID }}"
         host: ${{ vars.HOST }}
