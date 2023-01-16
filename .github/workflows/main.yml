@@ -8,7 +8,7 @@ jobs:
     name: updating-repository
     runs-on: ubuntu-latest
     environment: 
-      name: development
+      name: staging
     steps:
     - name: Updating repository
       uses: fifsky/ssh-action@master
@@ -27,16 +27,14 @@ jobs:
     needs: update
     runs-on: ubuntu-latest
     environment: 
-      name: development
+      name: staging
     steps:
     - name: building image
       uses: fifsky/ssh-action@master
       with:
         command: |
+          cd ${{ github.event.repository.name }}
           echo "ServerAliveInterval 60" >> ~/.ssh/config 
-          
-          docker stop containerdev
-          docker rm containerdev
 
           printf "\n\n generating docker image....\n\n "
           docker build -t ${{ github.event.repository.name }} .
@@ -50,14 +48,17 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     environment: 
-      name: development
+      name: staging
     steps:
     - name: starting server
       uses: fifsky/ssh-action@master
       with:
         command: |
-          printf "\n\n starting docker server on port *** ....\n\n "
-          docker run -d -p ${{ vars.INTERNAL_APP_PORT }}:8080 --name containerdev --restart=always ${{ github.event.repository.name }}:latest
+          docker stop containerhml
+          docker rm containerhml
+
+          printf "\n\n starting docker server on port ${{ vars.INTERNAL_APP_PORT }} ....\n\n "
+          docker run -d -p ${{ vars.INTERNAL_APP_PORT }}:8080 --name containerhml --restart=always ${{ github.event.repository.name }}:latest
 
         host: ${{ vars.HOST }}
         user: ${{ vars.SSH_USER }}
@@ -68,14 +69,17 @@ jobs:
     needs: deploy-hml
     runs-on: ubuntu-latest
     environment: 
-      name: development
+      name: production
     steps:
     - name: starting server
       uses: fifsky/ssh-action@master
       with:
         command: |
-          printf "\n\n starting docker server on port *** ....\n\n "
-          docker run -d -p ${{ vars.INTERNAL_APP_PORT }}:8080 --name containerdev --restart=always ${{ github.event.repository.name }}:latest
+          docker stop containerprd
+          docker rm containerprd
+
+          printf "\n\n starting docker server on port ${{ vars.INTERNAL_APP_PORT }} ....\n\n "
+          docker run -d -p ${{ vars.INTERNAL_APP_PORT }}:8080 --name containerprd --restart=always ${{ github.event.repository.name }}:latest
 
         host: ${{ vars.HOST }}
         user: ${{ vars.SSH_USER }}
