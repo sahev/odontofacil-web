@@ -14,9 +14,10 @@ jobs:
       uses: fifsky/ssh-action@master
       with:
         command: |
-          cd ${{ github.event.repository.name }}
+          cd hml/${{ github.event.repository.name }}
           printf "\n\n updating repository....\n\n "
-          git pull
+          git reset --hard origin/main
+          git pull origin main
 
         host: ${{ vars.HOST }}
         user: ${{ vars.SSH_USER }}
@@ -33,8 +34,7 @@ jobs:
       uses: fifsky/ssh-action@master
       with:
         command: |
-          cd ${{ github.event.repository.name }}
-          echo "ServerAliveInterval 60" >> ~/.ssh/config 
+          cd hml/${{ github.event.repository.name }}
 
           printf "\n\n generating docker image....\n\n "
           docker build -t ${{ github.event.repository.name }} .
