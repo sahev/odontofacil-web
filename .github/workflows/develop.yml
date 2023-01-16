@@ -19,17 +19,17 @@ jobs:
           printf "\n\n updating repository....\n\n "
           git reset --hard origin/develop
           git pull origin develop
-          OLD_IMAGE_ID=$(docker container ls --format='{{.Image}}' -f name=containerdev)
-          echo "::set-output name=OLD_IMAGE_ID::$OLD_IMAGE_ID"
+          old_image_id=$(docker container ls --format='{{.Image}}' -f name=containerdev)
+          echo "old_image_id=$old_image_id" >> $GITHUB_OUTPUT
 
-          echo "OLD_IMAGE_ID: ${{ steps.checkout.outputs.OLD_IMAGE_ID }}"
+          echo "old_image_id: ${{ steps.checkout.outputs.old_image_id }}"
 
         host: ${{ vars.HOST }}
         user: ${{ vars.SSH_USER }}
         key: ${{ secrets.SECRET_KEY }}
     - name: image id
       run: |
-        echo "OLD_IMAGE_ID: ${{ steps.checkout.outputs.OLD_IMAGE_ID }}"
+        echo "old_image_id: ${{ steps.checkout.outputs.old_image_id }}"
 
 
   build:
@@ -62,13 +62,14 @@ jobs:
     steps:
     - name: image id
       run: |
-        echo "OLD_IMAGE_ID: ${{ steps.checkout.outputs.OLD_IMAGE_ID }}"
+        echo "old_image_id: ${{ steps.checkout.outputs.old_image_id }}"
+
     - name: starting server
       uses: fifsky/ssh-action@master
       with:
         command: |
         
-          echo "OLD_IMAGE_ID: ${{ steps.checkout.outputs.OLD_IMAGE_ID }}"
+          echo "old_image_id: ${{ steps.checkout.outputs.old_image_id }}"
           docker stop containerdev
           docker rm containerdev
 
@@ -79,6 +80,3 @@ jobs:
         user: ${{ vars.SSH_USER }}
         key: ${{ secrets.SECRET_KEY }}
         
-    - name: image id
-      run: |
-        echo "OLD_IMAGE_ID: ${{ steps.checkout.outputs.OLD_IMAGE_ID }}"
