@@ -21,7 +21,7 @@ jobs:
           printf "\n\n updating repository....\n\n "
           git reset --hard origin/develop
           git pull origin develop
-          echo "imageid=$(docker container ls --format='{{.Image}}' -f name=containerdev) >> $GITHUB_OUTPUT
+          echo "imageid=$(docker container ls --format='{{.Image}}' -f name=containerdev)" >> $GITHUB_OUTPUT
 
           echo "old_image_id: ${{ needs.update.outputs.old_image_id }}"
 
