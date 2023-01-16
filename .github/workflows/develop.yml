@@ -27,7 +27,7 @@ jobs:
         key: ${{ secrets.SECRET_KEY }}
     - name: image id
       run: |
-        echo "my env 2: ${{ steps.checkout.outputs.OLD_IMAGE_ID }}"
+        echo "OLD_IMAGE_ID: ${{ steps.checkout.outputs.OLD_IMAGE_ID }}"
 
 
   build:
@@ -62,6 +62,8 @@ jobs:
       uses: fifsky/ssh-action@master
       with:
         command: |
+        
+          echo "OLD_IMAGE_ID: ${{ steps.checkout.outputs.OLD_IMAGE_ID }}"
           docker stop containerdev
           docker rm containerdev
 
