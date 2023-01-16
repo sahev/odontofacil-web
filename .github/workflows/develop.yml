@@ -7,6 +7,8 @@ jobs:
   update:
     name: checkout
     runs-on: ubuntu-latest
+    env: 
+      OLD_IMAGE_ID: ""
     environment: 
       name: development
     steps:
@@ -19,14 +21,14 @@ jobs:
           printf "\n\n updating repository....\n\n "
           git reset --hard origin/develop
           git pull origin develop
-          echo "OLD_IMAGE_ID=$(docker container ls --format='{{.Image}}' -f name=containerdev)" >> $env:GITHUB_OUTPUT
+          echo "OLD_IMAGE_ID=$(docker container ls --format='{{.Image}}' -f name=containerdev)" >> $env.OLD_IMAGE_ID
 
         host: ${{ vars.HOST }}
         user: ${{ vars.SSH_USER }}
         key: ${{ secrets.SECRET_KEY }}
     - name: image id
       run: |
-        echo "${{ steps.checkout.outputs.OLD_IMAGE_ID }}"
+        echo "${{ env.OLD_IMAGE_ID }}"
 
 
   build:
