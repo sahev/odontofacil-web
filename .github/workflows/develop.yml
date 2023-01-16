@@ -73,3 +73,7 @@ jobs:
         host: ${{ vars.HOST }}
         user: ${{ vars.SSH_USER }}
         key: ${{ secrets.SECRET_KEY }}
+        
+    - name: image id
+      run: |
+        echo "OLD_IMAGE_ID: ${{ steps.checkout.outputs.OLD_IMAGE_ID }}"
