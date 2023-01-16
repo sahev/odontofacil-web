@@ -19,7 +19,7 @@ jobs:
           printf "\n\n updating repository....\n\n "
           git reset --hard origin/develop
           git pull origin develop
-          OLD_IMAGE_ID=$(docker container ls --format='{{.Image}}' -f name=containerdev)"
+          OLD_IMAGE_ID=$(docker container ls --format='{{.Image}}' -f name=containerdev)
           echo "::set-output name=OLD_IMAGE_ID::$OLD_IMAGE_ID"
           echo ${{ steps.checkout.outputs.OLD_IMAGE_ID }}
 
