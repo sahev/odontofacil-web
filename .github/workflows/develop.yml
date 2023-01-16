@@ -7,6 +7,8 @@ jobs:
   update:
     name: checkout
     runs-on: ubuntu-latest
+    outputs:
+      old_image_id: ${{ steps.checkout.outputs.imageid }}
     environment: 
       name: development
     steps:
@@ -19,17 +21,16 @@ jobs:
           printf "\n\n updating repository....\n\n "
           git reset --hard origin/develop
           git pull origin develop
-          old_image_id=$(docker container ls --format='{{.Image}}' -f name=containerdev)
-          echo "old_image_id=$old_image_id" >> $GITHUB_OUTPUT
+          echo "imageid=$(docker container ls --format='{{.Image}}' -f name=containerdev) >> $GITHUB_OUTPUT
 
-          echo "old_image_id: ${{ steps.checkout.outputs.old_image_id }}"
+          echo "old_image_id: ${{ needs.update.outputs.old_image_id }}"
 
         host: ${{ vars.HOST }}
         user: ${{ vars.SSH_USER }}
         key: ${{ secrets.SECRET_KEY }}
     - name: image id
       run: |
-        echo "old_image_id: ${{ steps.checkout.outputs.old_image_id }}"
+        echo "old_image_id: ${{ needs.update.outputs.old_image_id }}"
 
 
   build:
@@ -62,14 +63,14 @@ jobs:
     steps:
     - name: image id
       run: |
-        echo "old_image_id: ${{ steps.checkout.outputs.old_image_id }}"
+        echo "old_image_id: ${{ needs.update.outputs.old_image_id }}"
 
     - name: starting server
       uses: fifsky/ssh-action@master
       with:
         command: |
         
-          echo "old_image_id: ${{ steps.checkout.outputs.old_image_id }}"
+          echo "old_image_id: ${{ needs.update.outputs.old_image_id }}"
           docker stop containerdev
           docker rm containerdev
 
