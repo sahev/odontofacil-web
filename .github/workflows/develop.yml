@@ -45,11 +45,8 @@ jobs:
     name: deploy-dev
     needs: build
     runs-on: ubuntu-latest
-    environment:
-      name: dev
-      url: ${{ vars.HOST }}:${{ vars.INTERNAL_APP_PORT }}
     steps:
-    - name: ls -a via ssh
+    - name: starting server
       uses: fifsky/ssh-action@master
       with:
         command: |

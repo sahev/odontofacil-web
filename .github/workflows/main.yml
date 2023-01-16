@@ -45,11 +45,8 @@ jobs:
     name: deploy-hml
     needs: build
     runs-on: ubuntu-latest
-    environment:
-      name: hmg
-      url: ${{ vars.HOST }}:${{ vars.INTERNAL_APP_PORT }}
     steps:
-    - name: ls -a via ssh
+    - name: starting server
       uses: fifsky/ssh-action@master
       with:
         command: |
@@ -63,12 +60,9 @@ jobs:
   deploy-prd:
     name: deploy-prd
     needs: deploy-hml
-    runs-on: ubuntu-latest    
-    environment:
-      name: prd
-      url: ${{ vars.HOST }}:${{ vars.INTERNAL_APP_PORT }}
+    runs-on: ubuntu-latest
     steps:
-    - name: ls -a via ssh
+    - name: starting server
       uses: fifsky/ssh-action@master
       with:
         command: |
