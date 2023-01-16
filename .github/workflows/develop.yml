@@ -1,0 +1,61 @@
+name: Develop
+on:
+  push:
+    branches: [ develop ]
+jobs:
+
+  update:
+    name: updating-repository
+    runs-on: ubuntu-latest
+    steps:
+    - name: Updating repository
+      uses: fifsky/ssh-action@master
+      with:
+        command: |
+          cd ${{ github.event.repository.name }}
+          printf "\n\n updating repository....\n\n "
+          git pull
+
+        host: ${{ vars.HOST }}
+        user: ${{ vars.SSH_USER }}
+        key: ${{ secrets.SECRET_KEY }}
+
+  build:
+    name: build
+    needs: update
+    runs-on: ubuntu-latest
+    steps:
+    - name: building image
+      uses: fifsky/ssh-action@master
+      with:
+        command: |
+          echo "ServerAliveInterval 60" >> ~/.ssh/config 
+          
+          docker stop containerdev
+          docker rm containerdev
+
+          printf "\n\n generating docker image....\n\n "
+          docker build -t ${{ github.event.repository.name }} .
+
+        host: ${{ vars.HOST }}
+        user: ${{ vars.SSH_USER }}
+        key: ${{ secrets.SECRET_KEY }}
+
+  deploy-dev:
+    name: deploy-dev
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+      url: ${{ vars.HOST }}:${{ vars.INTERNAL_APP_PORT }}
+    steps:
+    - name: ls -a via ssh
+      uses: fifsky/ssh-action@master
+      with:
+        command: |
+          printf "\n\n starting docker server on port *** ....\n\n "
+          docker run -d -p ${{ vars.INTERNAL_APP_PORT }}:8080 --name containerdev --restart=always ${{ github.event.repository.name }}:latest
+
+        host: ${{ vars.HOST }}
+        user: ${{ vars.SSH_USER }}
+        key: ${{ secrets.SECRET_KEY }}
