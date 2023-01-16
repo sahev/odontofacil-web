@@ -16,7 +16,8 @@ jobs:
         command: |
           cd hml/${{ github.event.repository.name }}
           printf "\n\n updating repository....\n\n "
-          git pull
+          git reset --hard origin/main
+          git pull origin main
 
         host: ${{ vars.HOST }}
         user: ${{ vars.SSH_USER }}

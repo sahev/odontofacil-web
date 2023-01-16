@@ -16,7 +16,8 @@ jobs:
         command: |
           cd dev/${{ github.event.repository.name }}
           printf "\n\n updating repository....\n\n "
-          git pull
+          git reset --hard origin/develop
+          git pull origin develop
 
         host: ${{ vars.HOST }}
         user: ${{ vars.SSH_USER }}
