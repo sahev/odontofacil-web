@@ -5,7 +5,7 @@ on:
 jobs:
 
   update:
-    name: updating-repository
+    name: checkout
     runs-on: ubuntu-latest
     environment: 
       name: development
