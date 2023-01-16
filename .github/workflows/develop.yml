@@ -49,6 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: 
       name: development
+      url: ${{ vars.HOST }}:${{ vars.INTERNAL_APP_PORT }}
     steps:
     - name: starting server
       uses: fifsky/ssh-action@master

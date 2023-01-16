@@ -49,6 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: 
       name: staging
+      url: ${{ vars.HOST }}:${{ vars.INTERNAL_APP_PORT }}
     steps:
     - name: starting server
       uses: fifsky/ssh-action@master
@@ -70,6 +71,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: 
       name: production
+      url: ${{ vars.HOST }}:${{ vars.INTERNAL_APP_PORT }}
     steps:
     - name: starting server
       uses: fifsky/ssh-action@master
