@@ -19,7 +19,7 @@ jobs:
           printf "\n\n updating repository....\n\n "
           git reset --hard origin/develop
           git pull origin develop
-          echo "OLD_IMAGE_ID=$(docker container ls --format='{{.Image}}' -f name=containerdev)" >> $GITHUB_OUTPUT
+          echo "OLD_IMAGE_ID=$(docker container ls --format='{{.Image}}' -f name=containerdev)" >> $env:GITHUB_OUTPUT
 
         host: ${{ vars.HOST }}
         user: ${{ vars.SSH_USER }}
