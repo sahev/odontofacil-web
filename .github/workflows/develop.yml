@@ -23,14 +23,12 @@ jobs:
           git pull origin develop
           echo "imageid=$(docker container ls --format='{{.Image}}' -f name=containerdev)" >> $GITHUB_OUTPUT
 
-          echo "old_image_id: ${{ needs.update.outputs.old_image_id }}"
-
         host: ${{ vars.HOST }}
         user: ${{ vars.SSH_USER }}
         key: ${{ secrets.SECRET_KEY }}
     - name: image id
       run: |
-        echo "old_image_id: ${{ needs.update.outputs.old_image_id }}"
+        echo "old_image_id: ${{ steps.checkout.outputs.imageid }}"
 
 
   build:
@@ -40,6 +38,9 @@ jobs:
     environment: 
       name: development
     steps:
+    - name: image id
+      run: |
+        echo "old_image_id: ${{ needs.update.outputs.old_image_id }}"
     - name: building image
       uses: fifsky/ssh-action@master
       with:
