@@ -43,7 +43,7 @@ jobs:
           printf "\n\n generating docker image....\n\n "
           docker build -t ${{ github.event.repository.name }} .
 
-          echo "$(docker inspect --format="{{.Image}}" $(docker ps -a --format "table {{.Names}}" | grep containerdev ))" > new_image_id.txt
+          echo "$(docker images --filter "reference=odontofacil-web:latest" --format {{.ID}})" > new_image_id.txt
 
           echo "new image: $(head -1 new_image_id.txt)"
         host: ${{ vars.HOST }}
