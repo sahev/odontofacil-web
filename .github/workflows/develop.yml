@@ -60,6 +60,8 @@ jobs:
       uses: fifsky/ssh-action@master
       with:
         command: |
+          cd dev/${{ github.event.repository.name }}
+          
           docker stop containerdev
           docker rm containerdev
 

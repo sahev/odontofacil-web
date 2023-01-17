@@ -41,7 +41,7 @@ export default {
     data: () => ({
         user: {
             initials: 'SE',
-            fullName: 'testando docker',
+            fullName: 'testando dockerrr',
             email: 'samu@el.com',
             image: 'https://cdn.vuetifyjs.com/images/parallax/material.jpg',
             role: 'doctor'
