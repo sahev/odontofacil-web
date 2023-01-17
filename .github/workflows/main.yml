@@ -74,7 +74,7 @@ jobs:
     - name: restart last container
       uses: fifsky/ssh-action@master
       if: ${{ failure() }}
-        with:
+      with:
           command: |
             cd hml/${{ github.event.repository.name }}
 
@@ -87,10 +87,10 @@ jobs:
           user: ${{ vars.SSH_USER }}
           key: ${{ secrets.SECRET_KEY }}
 
-      - name: clean images
-        uses: fifsky/ssh-action@master
-        if: ${{ success() }}
-        with:
+    - name: clean images
+      uses: fifsky/ssh-action@master
+      if: ${{ success() }}
+      with:
           command: |
             cd hml/${{ github.event.repository.name }}
             docker rmi $(head -1 old_image_id.txt)
