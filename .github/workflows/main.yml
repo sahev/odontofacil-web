@@ -72,8 +72,8 @@ jobs:
         user: ${{ vars.SSH_USER }}
         key: ${{ secrets.SECRET_KEY }}
     - name: restart last container
-        uses: fifsky/ssh-action@master
-        if: ${{ failure() }}
+      uses: fifsky/ssh-action@master
+      if: ${{ failure() }}
         with:
           command: |
             cd hml/${{ github.event.repository.name }}
@@ -89,7 +89,6 @@ jobs:
 
       - name: clean images
         uses: fifsky/ssh-action@master
-
         if: ${{ success() }}
         with:
           command: |
