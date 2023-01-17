@@ -114,12 +114,12 @@ jobs:
           rm -rf ~/prd/${{ github.event.repository.name }}/
           cp -r ~/hml/${{ github.event.repository.name }} ~/prd/
           
-          cd ~prd/${{ github.event.repository.name }}
+          cd ~/prd/${{ github.event.repository.name }}
           echo "$(docker inspect --format="{{.Image}}" $(docker ps -a --format "table {{.Names}}" | grep containerprd ))" > old_image_id.txt
           echo "new image: $(head -1 old_image_id.txt)"
 
           printf "\n\n generating docker image....\n\n "
-          cd ~prd/${{ github.event.repository.name }}
+          cd ~/prd/${{ github.event.repository.name }}
           docker build -t ${{ github.event.repository.name }}:prd .
 
           echo "$(docker images --filter "reference=${{ github.event.repository.name }}:prd" --format {{.ID}})" > new_image_id.txt
@@ -136,7 +136,7 @@ jobs:
           docker stop containerprd
           docker rm containerprd
 
-          cd ~prd/${{ github.event.repository.name }}
+          cd ~/prd/${{ github.event.repository.name }}
           
           printf "\n\n starting docker server on port ${{ vars.INTERNAL_APP_PORT }} ....\n\n "
           docker run -d -p ${{ vars.INTERNAL_APP_PORT }}:8080 --name containerprd --restart=always $(head -1 new_image_id.txt)
