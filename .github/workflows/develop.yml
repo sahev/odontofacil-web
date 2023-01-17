@@ -41,7 +41,7 @@ jobs:
           cd dev/${{ github.event.repository.name }}
 
           printf "\n\n generating docker image....\n\n "
-          docker build -t ${{ github.event.repository.name }} .
+          docker build -t ${{ github.event.repository.name }}:dev .
 
           echo "$(docker images --filter "reference=${{ github.event.repository.name }}:dev" --format {{.ID}})" > new_image_id.txt
 

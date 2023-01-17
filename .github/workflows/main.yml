@@ -112,7 +112,8 @@ jobs:
       uses: fifsky/ssh-action@master
       with:
         command: |
-          cp -r ~/hml/odontofacil-web ~/prd/
+          rm -rf ~/prd/${{ github.event.repository.name }}/
+          cp -r ~/hml/${{ github.event.repository.name }} ~/prd/
           
           cd ~prd/${{ github.event.repository.name }}
 
