@@ -7,8 +7,6 @@ jobs:
   update:
     name: checkout
     runs-on: ubuntu-latest
-    outputs:
-      old_image_id: ${{ steps.checkout.outputs.imageid }}
     environment: 
       name: development
     steps:
@@ -22,15 +20,11 @@ jobs:
           git reset --hard origin/develop
           git pull origin develop
 
-          echo "imageid=$(whoami)" >> $GITHUB_OUTPUT
+          echo "docker inspect --format='{{.Image}}' $(docker ps -a --format 'table {{.Names}}' | grep containerdev )" >> old_image_id.txt
 
         host: ${{ vars.HOST }}
         user: ${{ vars.SSH_USER }}
         key: ${{ secrets.SECRET_KEY }}
-    - name: image id
-      run: |
-        echo "old_image_id: ${{ steps.checkout.outputs.imageid }}"
-
 
   build:
     name: build
@@ -39,9 +33,6 @@ jobs:
     environment: 
       name: development
     steps:
-    - name: image id
-      run: |
-        echo "old_image_id: ${{ needs.update.outputs.old_image_id }}"
     - name: building image
       uses: fifsky/ssh-action@master
       with:
@@ -50,6 +41,8 @@ jobs:
 
           printf "\n\n generating docker image....\n\n "
           docker build -t ${{ github.event.repository.name }} .
+
+          echo "docker inspect --format='{{.Image}}' $(docker ps -a --format 'table {{.Names}}' | grep containerdev )" >> new_image_id.txt
 
         host: ${{ vars.HOST }}
         user: ${{ vars.SSH_USER }}
@@ -63,16 +56,10 @@ jobs:
       name: development
       url: http://${{ vars.HOST }}:${{ vars.EXTERNAL_APP_PORT }}/
     steps:
-    - name: image id
-      run: |
-        echo "old_image_id: ${{ needs.update.outputs.old_image_id }}"
-
     - name: starting server
       uses: fifsky/ssh-action@master
       with:
         command: |
-        
-          echo "old_image_id: ${{ needs.update.outputs.old_image_id }}"
           docker stop containerdev
           docker rm containerdev
 
@@ -83,3 +70,38 @@ jobs:
         user: ${{ vars.SSH_USER }}
         key: ${{ secrets.SECRET_KEY }}
         
+  finally:
+    name: finally
+    runs-on: ubuntu-latest
+    needs: [build, deploy-dev]
+    environment: 
+      name: development
+    steps:
+      - name: restart last container
+        uses: fifsky/ssh-action@master
+
+        if: ${{ failure() }}
+        with:
+          command: |
+            cd dev/${{ github.event.repository.name }}
+            docker rmi $(cat new_image_id.txt)
+            
+            printf "\n\n restarting docker server on port ${{ vars.INTERNAL_APP_PORT }} ....\n\n "
+            docker run -d -p ${{ vars.INTERNAL_APP_PORT }}:8080 --name containerdev --restart=always $(cat old_image_id.txt)
+
+          host: ${{ vars.HOST }}
+          user: ${{ vars.SSH_USER }}
+          key: ${{ secrets.SECRET_KEY }}
+
+      - name: clean images
+        uses: fifsky/ssh-action@master
+
+        if: ${{ success() }}
+        with:
+          command: |
+            cd dev/${{ github.event.repository.name }}
+            docker rmi $(cat old_image_id.txt)
+
+          host: ${{ vars.HOST }}
+          user: ${{ vars.SSH_USER }}
+          key: ${{ secrets.SECRET_KEY }}
