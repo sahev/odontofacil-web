@@ -115,13 +115,15 @@ jobs:
           cp -r ~/hml/${{ github.event.repository.name }} ~/prd/
           
           cd ~prd/${{ github.event.repository.name }}
-
           echo "$(docker inspect --format="{{.Image}}" $(docker ps -a --format "table {{.Names}}" | grep containerprd ))" > old_image_id.txt
+          echo "new image: $(head -1 old_image_id.txt)"
 
           printf "\n\n generating docker image....\n\n "
+          cd ~prd/${{ github.event.repository.name }}
           docker build -t ${{ github.event.repository.name }}:prd .
 
           echo "$(docker images --filter "reference=${{ github.event.repository.name }}:prd" --format {{.ID}})" > new_image_id.txt
+          echo "new image: $(head -1 new_image_id.txt)"
 
         host: ${{ vars.HOST }}
         user: ${{ vars.SSH_USER }}
