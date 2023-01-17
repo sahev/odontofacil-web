@@ -41,7 +41,7 @@ export default {
     data: () => ({
         user: {
             initials: 'SE',
-            fullName: 'mud',
+            fullName: 'mudeiii',
             email: 'samu@el.com',
             image: 'https://cdn.vuetifyjs.com/images/parallax/material.jpg',
             role: 'doctor'
