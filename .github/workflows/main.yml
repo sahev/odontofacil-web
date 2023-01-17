@@ -19,7 +19,7 @@ jobs:
           git reset --hard origin/main
           git pull origin main
 
-          echo "docker inspect --format='{{.Image}}' $(docker ps -a --format 'table {{.Names}}' | grep containerhml )" > old_image_id.txt
+          echo "$(docker inspect --format="{{.Image}}" $(docker ps -a --format "table {{.Names}}" | grep containerhml ))" > old_image_id.txt
 
         host: ${{ vars.HOST }}
         user: ${{ vars.SSH_USER }}
@@ -41,7 +41,7 @@ jobs:
           printf "\n\n generating docker image....\n\n "
           docker build -t ${{ github.event.repository.name }} .
 
-          echo "docker inspect --format='{{.Image}}' $(docker ps -a --format 'table {{.Names}}' | grep containerhml )" > new_image_id.txt
+          echo "$(docker inspect --format="{{.Image}}" $(docker ps -a --format "table {{.Names}}" | grep containerhml ))" > new_image_id.txt
 
         host: ${{ vars.HOST }}
         user: ${{ vars.SSH_USER }}
@@ -83,7 +83,7 @@ jobs:
       with:
         command: |
           cd prd/${{ github.event.repository.name }}
-          echo "docker inspect --format='{{.Image}}' $(docker ps -a --format 'table {{.Names}}' | grep containerprd )" > old_image_id.txt
+          echo "$(docker inspect --format="{{.Image}}" $(docker ps -a --format "table {{.Names}}" | grep containerprd ))" > old_image_id.txt
 
           docker stop containerprd
           docker rm containerprd
