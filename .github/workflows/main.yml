@@ -64,7 +64,7 @@ jobs:
 
           cd hml/${{ github.event.repository.name }}
           printf "\n\n starting docker server on port ${{ vars.INTERNAL_APP_PORT }} ....\n\n "
-          docker run -d -p ${{ vars.INTERNAL_APP_PORT }}:8080 --name containerhml --restart=always $(cat new_image_id.txt)
+          docker run -d -p ${{ vars.INTERNAL_APP_PORT }}:8080 --name containerhml --restart=always $(head -1 new_image_id.txt)
 
         host: ${{ vars.HOST }}
         user: ${{ vars.SSH_USER }}
@@ -93,7 +93,7 @@ jobs:
 
           cd ~prd/${{ github.event.repository.name }}
           printf "\n\n starting docker server on port ${{ vars.INTERNAL_APP_PORT }} ....\n\n "
-          docker run -d -p ${{ vars.INTERNAL_APP_PORT }}:8080 --name containerprd --restart=always $(cat new_image_id.txt)
+          docker run -d -p ${{ vars.INTERNAL_APP_PORT }}:8080 --name containerprd --restart=always $(head -1 new_image_id.txt)
 
         host: ${{ vars.HOST }}
         user: ${{ vars.SSH_USER }}
@@ -115,9 +115,9 @@ jobs:
             cd prd/${{ github.event.repository.name }}
 
             printf "\n\n restarting docker server on port ${{ vars.INTERNAL_APP_PORT }} ....\n\n "
-            docker run -d -p ${{ vars.INTERNAL_APP_PORT }}:8080 --name containerprd --restart=always $(cat old_image_id.txt)
+            docker run -d -p ${{ vars.INTERNAL_APP_PORT }}:8080 --name containerprd --restart=always $(head -1 old_image_id.txt)
 
-            docker rmi $(cat new_image_id.txt)
+            docker rmi $(head -1 new_image_id.txt)
 
           host: ${{ vars.HOST }}
           user: ${{ vars.SSH_USER }}
@@ -130,7 +130,7 @@ jobs:
         with:
           command: |
             cd hml/${{ github.event.repository.name }}
-            docker rmi $(cat old_image_id.txt)
+            docker rmi $(head -1 old_image_id.txt)
 
           host: ${{ vars.HOST }}
           user: ${{ vars.SSH_USER }}
@@ -152,9 +152,9 @@ jobs:
             cd hml/${{ github.event.repository.name }}
 
             printf "\n\n restarting docker server on port ${{ vars.INTERNAL_APP_PORT }} ....\n\n "
-            docker run -d -p ${{ vars.INTERNAL_APP_PORT }}:8080 --name containerhml --restart=always $(cat old_image_id.txt)
+            docker run -d -p ${{ vars.INTERNAL_APP_PORT }}:8080 --name containerhml --restart=always $(head -1 old_image_id.txt)
             
-            docker rmi $(cat new_image_id.txt)
+            docker rmi $(head -1 new_image_id.txt)
             
           host: ${{ vars.HOST }}
           user: ${{ vars.SSH_USER }}
@@ -167,7 +167,7 @@ jobs:
         with:
           command: |
             cd hml/${{ github.event.repository.name }}
-            docker rmi $(cat old_image_id.txt)
+            docker rmi $(head -1 old_image_id.txt)
 
           host: ${{ vars.HOST }}
           user: ${{ vars.SSH_USER }}
