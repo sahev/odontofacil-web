@@ -22,6 +22,7 @@ jobs:
 
           echo "$(docker inspect --format="{{.Image}}" $(docker ps -a --format "table {{.Names}}" | grep containerdev ))" > old_image_id.txt
 
+          echo "old image: $(head -1 old_image_id.txt)"
         host: ${{ vars.HOST }}
         user: ${{ vars.SSH_USER }}
         key: ${{ secrets.SECRET_KEY }}
@@ -44,6 +45,7 @@ jobs:
 
           echo "$(docker inspect --format="{{.Image}}" $(docker ps -a --format "table {{.Names}}" | grep containerdev ))" > new_image_id.txt
 
+          echo "new image: $(head -1 new_image_id.txt)"
         host: ${{ vars.HOST }}
         user: ${{ vars.SSH_USER }}
         key: ${{ secrets.SECRET_KEY }}
@@ -61,7 +63,7 @@ jobs:
       with:
         command: |
           cd dev/${{ github.event.repository.name }}
-          
+
           docker stop containerdev
           docker rm containerdev
 
