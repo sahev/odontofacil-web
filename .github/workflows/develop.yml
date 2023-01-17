@@ -20,7 +20,7 @@ jobs:
           git reset --hard origin/develop
           git pull origin develop
 
-          echo "docker inspect --format='{{.Image}}' $(docker ps -a --format 'table {{.Names}}' | grep containerdev )" >> old_image_id.txt
+          echo "$(docker inspect --format="{{.Image}}" $(docker ps -a --format "table {{.Names}}" | grep containerdev ))" > old_image_id.txt
 
         host: ${{ vars.HOST }}
         user: ${{ vars.SSH_USER }}
@@ -42,7 +42,7 @@ jobs:
           printf "\n\n generating docker image....\n\n "
           docker build -t ${{ github.event.repository.name }} .
 
-          echo "docker inspect --format='{{.Image}}' $(docker ps -a --format 'table {{.Names}}' | grep containerdev )" >> new_image_id.txt
+          echo "$(docker inspect --format="{{.Image}}" $(docker ps -a --format "table {{.Names}}" | grep containerdev ))" > new_image_id.txt
 
         host: ${{ vars.HOST }}
         user: ${{ vars.SSH_USER }}
@@ -64,7 +64,7 @@ jobs:
           docker rm containerdev
 
           printf "\n\n starting docker server on port ${{ vars.INTERNAL_APP_PORT }} ....\n\n "
-          docker run -d -p ${{ vars.INTERNAL_APP_PORT }}:8080 --name containerdev --restart=always ${{ github.event.repository.name }}:latest
+          docker run -d -p ${{ vars.INTERNAL_APP_PORT }}:8080 --name containerdev --restart=always $(cat new_image_id.txt)
 
         host: ${{ vars.HOST }}
         user: ${{ vars.SSH_USER }}
@@ -84,11 +84,12 @@ jobs:
         with:
           command: |
             cd dev/${{ github.event.repository.name }}
-            docker rmi $(cat new_image_id.txt)
-            
+
             printf "\n\n restarting docker server on port ${{ vars.INTERNAL_APP_PORT }} ....\n\n "
             docker run -d -p ${{ vars.INTERNAL_APP_PORT }}:8080 --name containerdev --restart=always $(cat old_image_id.txt)
 
+            docker rmi $(cat new_image_id.txt)
+            
           host: ${{ vars.HOST }}
           user: ${{ vars.SSH_USER }}
           key: ${{ secrets.SECRET_KEY }}
