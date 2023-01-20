@@ -1,20 +1,21 @@
 <template>
     <v-app>
-        <v-main class="bg-grey-lighten-4">
-            <v-toolbar elevation="3" class="bg-blue-lighten-5">
-                <v-toolbar-title>Login
-                </v-toolbar-title>
-            </v-toolbar>
-            
-        <v-container class="text-center">
+        <v-container>
+            <v-card-title>
+                Login
+            </v-card-title>
             <div>
-                <v-btn @click="this.setUser(this.user)" to="/" >Logar</v-btn>
+                <v-btn @click="this.setUser(this.assistant)" to="/">assistant</v-btn>
+            </div>
+            <div>
+                <v-btn @click="this.setUser(this.administrator)" to="/">administrator</v-btn>
+            </div>
+            <div>
+                <v-btn @click="this.setUser(this.doctor)" to="/">doctor</v-btn>
             </div>
         </v-container>
-        </v-main>
-
-
     </v-app>
+
 </template>
 <script>
 import { useNavBarStore } from '@/components/navbar/store/NavBarStore.ts';
@@ -29,26 +30,39 @@ export default {
 
     },
     methods: {
-        setUser() {
-            console.log('setuserlogin');
-            this.navBarStore.setUser(this.user);
-        }
-        
+        setUser(user) {
+            this.navBarStore.setUser(user);
+        },
+
     },
     computed: {
-        
+
+    },
+    created() {
+        this.navBarStore.logoutUser();
     },
     data: () => ({
-        user: {
-            initials: 'SE',
-            fullName: 'astolfo',
-            email: 'samu@el.com',
+        administrator: {
+            initials: 'do',
+            fullName: 'dono',
+            email: 'administrator@el.com',
             image: 'https://cdn.vuetifyjs.com/images/parallax/material.jpg',
-            role: 'doctor'
+            role: 1
         },
-    }),
-    created() {
-       
-    }
+        assistant: {
+            initials: 're',
+            fullName: 'recepcionista',
+            email: 'recepcionista@el.com',
+            image: 'https://cdn.vuetifyjs.com/images/parallax/material.jpg',
+            role: 2
+        },
+        doctor: {
+            initials: 'dt',
+            fullName: 'doutor',
+            email: 'doutor@el.com',
+            image: 'https://cdn.vuetifyjs.com/images/parallax/material.jpg',
+            role: 3
+        },
+    })
 }
 </script>
