@@ -76,7 +76,7 @@
 
 <script>
 import { useNavBarStore } from './store/NavBarStore.ts';
-import { Role } from '@/pages/enums/RoleEnum.ts'
+import { Role } from '@/components/enums/RoleEnum.ts'
 
 
 export default {
