@@ -1,9 +1,6 @@
 <template>
   <v-navigation-drawer v-model="drawer">
-
-
     <v-menu location="end">
-
       <template v-slot:activator="{ props }">
         <v-list class="text-center">
           <v-list-item>
@@ -63,6 +60,11 @@
           Alterar unidade
         </v-btn>
       </div>
+      <div class="pa-2">
+        <v-btn block to="/login" color="primary">
+          Sair
+        </v-btn>
+      </div>
     </template>
   </v-navigation-drawer>
 
@@ -70,20 +72,33 @@
     <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
     <v-toolbar-title>OdontoFácil</v-toolbar-title>
-    <v-icon>mdi-cog</v-icon>
+    <v-btn :prepend-icon="theme.global.name.value === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
+      @click="toggleTheme" />
+
   </v-app-bar>
 </template>
 
 <script>
 import { useNavBarStore } from './store/NavBarStore.ts';
 import { Role } from '@/components/enums/RoleEnum.ts'
-
+import { useTheme } from 'vuetify'
 
 export default {
   name: "NavBar",
   setup() {
     const navBarStore = useNavBarStore();
-    return { navBarStore };
+    const theme = useTheme();
+
+    const toggleTheme = () => {
+      theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
+      localStorage.setItem('theme', theme.global.name.value)
+    };
+
+    return {
+      navBarStore,
+      theme,
+      toggleTheme
+    };
   },
   computed: {
     user() {
@@ -96,7 +111,11 @@ export default {
   mounted() {
 
   },
+  methods: {
+
+  },
   data: () => ({
+
     Role,
     drawer: null,
     links: [
@@ -109,8 +128,7 @@ export default {
       ['mdi-account-group', 'Doutores', '/doctors'],
     ],
     userItems: [
-      { title: 'Conta', path: '/edit-account' },
-      { title: 'Sair', path: '/login' },
+      { title: 'Conta', path: '/edit-account' }
     ],
   }),
 }

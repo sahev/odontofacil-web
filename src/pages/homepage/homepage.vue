@@ -3,8 +3,8 @@
 
     <NavBar />
 
-    <v-main class="bg-grey-lighten-4">
-      <v-toolbar elevation="3" class="bg-blue-lighten-5">
+    <v-main>
+      <v-toolbar elevation="3">
         <v-toolbar-title>Início
         </v-toolbar-title>
       </v-toolbar>
@@ -53,7 +53,7 @@ export default {
   },
   data: () => ({
     drawer: null,
-
+    theme: localStorage.getItem('theme'),
   })
 }
 </script>

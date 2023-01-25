@@ -1,4 +1,4 @@
-import { useLocalStorage, clearLocalStorage } from "@/store/store";
+import { useLocalStorage, removeLocalStorageItem } from "@/store/store";
 import { defineStore } from "pinia";
 
 export const useNavBarStore = defineStore('navbar', {
@@ -14,7 +14,7 @@ export const useNavBarStore = defineStore('navbar', {
         
         logoutUser() {
             this.user = {};
-            clearLocalStorage();
+            removeLocalStorageItem('user');
         }
     },
 
