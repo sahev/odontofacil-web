@@ -2,7 +2,7 @@
     <v-app>
         <NavigationBarVue />
 
-        <v-main class="bg-grey-lighten-4">
+        <v-main>
             <v-toolbar elevation="3" class="bg-blue-lighten-5">
                 <v-toolbar-title>Configurações
                 </v-toolbar-title>
