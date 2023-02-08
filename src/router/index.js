@@ -3,49 +3,72 @@ import Homepage from '@/pages/homepage/homepage.vue'
 import Patients from '@/pages/Patients/Patients.vue'
 import Schedule from '@/pages/Schedule/Schedule.vue'
 import Login from '@/pages/login/Login.vue'
+import LoginArea from '@/pages/login/components/LoginArea.vue'
 import Administration from '@/pages/administration/Administration.vue'
-import Clinics from '@/pages/clinics/Clinics.vue'
+import ClinicalUnit from '@/pages/clinics/ClinicalUnit.vue'
+import ClinicalUnitForm from '@/pages/clinics/components/ClinicalUnitForm.vue'
 import Doctors from '@/pages/doctors/Doctors.vue'
+
 
 const routes = [
   {
+    path: '/login',
+    name: 'Login',
+    component: Login,
+    meta: {
+     hideNavbar: true,
+    }
+  },  
+  {
+    path: '/select-area',
+    name: 'Area',
+    component: LoginArea,
+    meta: {
+     hideNavbar: true,
+    }
+  },
+  {
     path: '/',
-    name: 'Homepage',
-    component: Homepage
+    name: 'Início',
+    component: Homepage,
   },
   {
     path: '/patients',
-    name: 'Patients',
+    name: 'Pacientes',
     component: Patients
   },
   {
     path: '/schedule',
-    name: 'Schedule',
+    name: 'Agenda',
     component: Schedule
   },
   {
-    path: '/login',
-    name: 'Login',
-    component: Login
-  },
-  {
     path: '/adm',
-    name: 'Administration',
+    name: 'Administração',
     component: Administration
   },
   {
     path: '/doctors',
-    name: 'Doctors',
+    name: 'Doutores',
     component: Doctors
   },
   {
-    path: '/clinics',
-    name: 'Clinics',
-    component: Clinics
+    path: '/clinical-units/',
+    name: 'Unidades Clínicas',
+    component: ClinicalUnit,
+    children: [
+
+    ]
+  },      
+  {
+    path: '/clinical-units/:id',
+    name: 'Editar unidade clínica',
+    component: ClinicalUnitForm,
   },
 ]
 
 const router = createRouter({
+  base: process.env.BASE_URL,
   history: createWebHistory(process.env.BASE_URL),
   routes
 })

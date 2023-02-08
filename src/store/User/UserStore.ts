@@ -1,7 +1,7 @@
 import { useLocalStorage, removeLocalStorageItem } from "@/store/store";
 import { defineStore } from "pinia";
 
-export const useNavBarStore = defineStore('navbar', {
+export const useUserStore = defineStore('navbar', {
     state: () => ({
         user: JSON.parse(localStorage.getItem('user'))
     }),

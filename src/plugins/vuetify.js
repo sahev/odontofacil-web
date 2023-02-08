@@ -1,6 +1,7 @@
 // Styles
 import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/styles'
+import '@vuepic/vue-datepicker/dist/main.css'
 
 // Imports
 import { createVuetify } from 'vuetify'
@@ -42,8 +43,8 @@ export default createVuetify({
       dark: {
         colors: {
           primary: '#8ecae6',
-          secondary: '#ffff',
-          tertiary: '#fffff',
+          secondary: '#ffffff',
+          tertiary: '#ffffff',
           accent: '#FF4081',
           
         },

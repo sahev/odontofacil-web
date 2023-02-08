@@ -1,13 +1,4 @@
 <template>
-  <v-app>
-
-    <NavBar />
-
-    <v-main>
-      <v-toolbar elevation="3">
-        <v-toolbar-title>Início
-        </v-toolbar-title>
-      </v-toolbar>
       <v-container>
 
         <section class="flex-container">
@@ -33,12 +24,9 @@
         </v-row>
 
       </v-container>
-    </v-main>
-  </v-app>
 </template>
 
 <script>
-import NavBar from '@/components/navbar/NavigationBar.vue'
 import QueuePatients from './components/QueuePatients.vue';
 import DoctorsList from './components/DoctorsList.vue';
 import ItemBoard from './components/ItemBoard.vue';
@@ -46,7 +34,6 @@ import ItemBoard from './components/ItemBoard.vue';
 export default {
   name: "HomePage",
   components: {
-    NavBar,
     QueuePatients,
     DoctorsList,
     ItemBoard
