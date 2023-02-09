@@ -7,7 +7,7 @@ import LoginArea from '@/pages/login/components/LoginArea.vue'
 import Administration from '@/pages/administration/Administration.vue'
 import ClinicalUnit from '@/pages/clinics/ClinicalUnit.vue'
 import ClinicalUnitForm from '@/pages/clinics/components/ClinicalUnitForm.vue'
-import Doctors from '@/pages/doctors/Doctors.vue'
+import Employees from '@/pages/employees/Employees.vue'
 
 
 const routes = [
@@ -48,9 +48,9 @@ const routes = [
     component: Administration
   },
   {
-    path: '/doctors',
-    name: 'Doutores',
-    component: Doctors
+    path: '/employees',
+    name: 'Funcionários',
+    component: Employees
   },
   {
     path: '/clinical-units/',

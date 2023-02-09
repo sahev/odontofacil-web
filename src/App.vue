@@ -3,10 +3,10 @@
     <NavigationBar v-if="!$route.meta.hideNavbar" />
 
     <v-main>
-      <v-toolbar elevation="3">
+      <!-- <v-toolbar elevation="3">
         <v-toolbar-title>{{ currentRouteName }}
         </v-toolbar-title>
-      </v-toolbar>
+      </v-toolbar> -->
       
       <router-view />
     </v-main>

@@ -1,12 +1,15 @@
 <template>
-
-	<v-btn v-if="!this.dialog" class="fixed-btn elevation-3" icon color="secondary" @click="showClinicForm()">
+	<GlobalToolbar />
+	
+	<v-btn v-if="!this.dialog" class="fixed-btn elevation-3" icon color="secondary" @click="showClinicOptions()">
 		<v-icon dark>mdi-plus</v-icon>
 	</v-btn>
 
-	<v-container v-if="!this.dialog">
+	<v-progress-linear v-show="loading" :indeterminate="true" absolute bottom color="primary"></v-progress-linear>
+
+	<v-container v-if="!this.dialog && !loading">
 		<v-card :class="clinic.status == 1 ? `clinicalUnits-list active-clinic` : `clinicalUnits-list inactive-clinic`"
-			v-for="clinic in clinicalUnits" :key="clinic" @click="showClinicForm(clinic)">
+			v-for="clinic in clinicalUnits" :key="clinic" @click="showClinicOptions(clinic)">
 			<template v-slot:title>
 				{{ clinic.name }}
 			</template>
@@ -22,6 +25,7 @@
 				</v-chip-group>
 			</template>
 		</v-card>
+
 	</v-container>
 
 
@@ -30,96 +34,86 @@
 			{{ item }}
 		</v-tab>
 	</v-tabs>
+
+	<v-divider v-if="this.dialog" />
+
 	<v-window v-if="this.dialog" v-model="tab">
 
 
 		<v-window-item value="dados principais">
 			<ClinicForm :dialog="this.dialog" :selectedClinicalUnit="this.selectedClinicalUnit"
-				@updateDialog="dialog = $event" />
+				@updateDialog="dialog = $event" @onCancel="onCancel" />
 		</v-window-item>
 
 		<v-window-item value="horário de funcionamento">
-			<clinicalUnitschedule :selectedClinicalUnit="this.selectedClinicalUnit" @updateDialog="dialog = $event" @setDefaultWorkDays="setDefaultWorkDays($event)"/>
+			<clinicalUnitschedule v-model:selectedClinicalUnitProp="this.selectedClinicalUnit"
+				@updateDialog="dialog = $event" @setDefaultWorkDays="setDefaultWorkDays" @onCancel="onCancel" />
 		</v-window-item>
 
-		<v-window-item value="doutores">
-			<ClinicEmployes />
+		<v-window-item value="funcionários">
+			<ClinicalUnitEmployees />
 		</v-window-item>
 
 	</v-window>
-
 </template>
 
 <script>
 import ClinicForm from './components/ClinicalUnitForm.vue';
-import ClinicEmployes from './components/ClinicalUnitEmployes.vue';
+import ClinicalUnitEmployees from './components/ClinicalUnitEmployees.vue';
 import clinicalUnitschedule from './components/ClinicalUnitSchedule.vue';
 
 export default {
 	name: "ClinicalUnitPage",
 	components: {
 		ClinicForm,
-		ClinicEmployes,
+		ClinicalUnitEmployees,
 		clinicalUnitschedule
 	},
 	created() {
-
+		this.getClinicalUnits();
+	},
+	computed: {
 	},
 	methods: {
+		onCancel(event) {
+			this.clinicalUnits.map(clinic => {
+				if (clinic.id == event.id) {
+					Object.assign(clinic, event)
+				}
+			})
+		},
+		getClinicalUnits() {
+			this.loading = true;
+			setTimeout(() => {
+				this.loading = false;
+				this.clinicalUnits = this.clinicalUnitsMock;
+			}, 700);
+
+		},
 		setDefaultWorkDays(event) {
-			console.log(event, 'evento atualizuação');
-			this.selectedClinicalUnit = event;
-		},	
-		showClinicForm(clinicalId) {
+			this.selectedClinicalUnit.workDays = event;
+		},
+		showClinicOptions(clinicalId) {
 			this.selectedClinicalUnit = clinicalId;
 			this.dialog = true;
 			this.tab = 'dados principais';
 		}
-	},	
+	},
 	data: () => ({
+		loading: false,
 		items: [
-			'dados principais', 'horário de funcionamento', 'doutores'
+			'dados principais', 'horário de funcionamento', 'funcionários'
 		],
 		selectedClinicalUnit: {},
 		dialog: false,
 		tab: null,
-		clinicalUnits: [
+		clinicalUnitsMock: [
 			{
 				id: 1,
 				name: "unidade clinica 1",
 				address: "rua joao cardoso, 25 - sp",
 				status: true,
 				services: ["Periodontia", "Ortodontia", "Clínica geral", "Implante dentário", "Clareamento"],
-				workDays: [
-					{
-						name: 'Segunda',
-						period: ['Tarde']
-					},
-					{
-						name: 'Terça',
-						period: []
-					},
-					{
-						name: 'Quarta',
-						period: []
-					},
-					{
-						name: 'Quinta',
-						period: ['Noite']
-					},
-					{
-						name: 'Sexta',
-						period: ['Noite']
-					},
-					{
-						name: 'Sábado',
-						period: ['Noite']
-					},
-					{
-						name: 'Domingo',
-						period: ['Noite']
-					},
-				]
 			},
 			{
 				id: 2,
@@ -130,31 +124,45 @@ export default {
 				workDays: [
 					{
 						name: 'Segunda',
-						period: ['Tarde']
+						enabled: true,
+						startTime: [
+							{
+								hours: 9,
+								minutes: 0
+							},
+							{
+								hours: 12,
+								minutes: 0
+							}
+						],
+						endTime: [
+							{
+								hours: 13,
+								minutes: 0
+							},
+							{
+								hours: 18,
+								minutes: 0
+							}
+						],
 					},
 					{
-						name: 'Terça',
-						period: []
+						name: 'Terça'
 					},
 					{
-						name: 'Quarta',
-						period: []
+						name: 'Quarta'
 					},
 					{
-						name: 'Quinta',
-						period: ['Noite']
+						name: 'Quinta'
 					},
 					{
-						name: 'Sexta',
-						period: []
+						name: 'Sexta'
 					},
 					{
-						name: 'Sábado',
-						period: []
+						name: 'Sábado'
 					},
 					{
-						name: 'Domingo',
-						period: []
+						name: 'Domingo'
 					},
 				]
 			},
@@ -171,36 +179,7 @@ export default {
 				address: "rua joao cardoso, 25 - sp",
 				status: true,
 				services: ["Periodontia", "Ortodontia", "Clínica geral", "Implante dentário", "Clareamento"],
-				workDays: [
-					{
-						name: 'Segunda',
-						period: ['Tarde']
-					},
-					{
-						name: 'Terça',
-						period: ['Tarde', 'Noite']
-					},
-					{
-						name: 'Quarta',
-						period: []
-					},
-					{
-						name: 'Quinta',
-						period: ['Noite']
-					},
-					{
-						name: 'Sexta',
-						period: []
-					},
-					{
-						name: 'Sábado',
-						period: []
-					},
-					{
-						name: 'Domingo',
-						period: []
-					},
-				]
+
 			},
 		]
 	}),

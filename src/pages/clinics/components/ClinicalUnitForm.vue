@@ -60,7 +60,7 @@ import { onMounted, ref } from 'vue'
 
 export default {
 	name: 'ClinicForm',
-	emits: ['updateDialog'],
+	emits: ['updateDialog', 'onCancel'],
 	props: {
 		dialog: { type: Boolean, default: false },
 		selectedClinicalUnit: { type: Object, default: Object },
@@ -79,27 +79,20 @@ export default {
 			form.value = props.selectedClinicalUnit;
 		})
 
-		const onCancel = () => {
-			emit('updateDialog', false);
-
-		}
-
 		const onSave = () => {
 			console.log('save new clinical unit', form.value);
 			emit('updateDialog', false);
 		}
 
 		const cancelForm = () => {
-			form.value = initialValue;
-			console.log('cancel = emitir evento pro componente pai e chamar metodo de atualização de pagina', form.value, initialValue);
+			emit('onCancel', initialValue);
 			emit('updateDialog', false);
 		}
 
 		return {
 			form,
-			onCancel,
+			cancelForm,
 			onSave,
-			cancelForm
 		}
 	},
 	data: () => ({
