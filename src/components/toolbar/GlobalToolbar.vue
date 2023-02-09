@@ -3,7 +3,7 @@
         <v-toolbar-title>{{ currentRouteName }}
         </v-toolbar-title>
         <v-responsive v-if="(enableSearch ?? false)" style="padding-right: 20px" max-width="344">
-            <v-text-field v-model="onSearchValue" variant="underlined" prepend-inner-icon="mdi-magnify" label="Search" hide-details></v-text-field>
+            <v-text-field v-model="onSearchValue" variant="underlined" prepend-inner-icon="mdi-magnify" label="Buscar" hide-details></v-text-field>
         </v-responsive>
     </v-toolbar>
 </template>
