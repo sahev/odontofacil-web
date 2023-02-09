@@ -87,9 +87,9 @@
     <v-app-bar color="primary">
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <v-toolbar-title>OdontoFácil</v-toolbar-title>
+      <v-toolbar-title >OdontoFácil</v-toolbar-title>
+      
       <v-card-subtitle>{{ user.selectedArea }}</v-card-subtitle>
-
 
       <v-btn :prepend-icon="theme.global.name.value === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
         @click="toggleTheme" />
@@ -157,7 +157,7 @@ export default {
     ],
     adminLinks: [
       ['mdi-folder-home-outline', 'Unidades Clínicas', '/clinical-units'],
-      ['mdi-account-group', 'Doutores', '/doctors'],
+      ['mdi-account-group', 'Funcionários', '/employees'],
     ],
     userItems: [
       { title: 'Conta', path: '/edit-account' }
