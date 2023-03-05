@@ -1,4 +1,5 @@
 <template>
+  <GlobalToolbar />
       <v-container>
 
         <section class="flex-container">

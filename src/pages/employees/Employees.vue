@@ -1,17 +1,15 @@
 <template>
-    <GlobalToolbar :enableSearch="true" @onSearch="searchValue"></GlobalToolbar>
-    <v-btn class="fixed-btn elevation-3" icon color="primary" @click="isCreate">
-        <v-icon>mdi-plus</v-icon>
-    </v-btn>
+
+    <GlobalToolbar :enableSearch="true" :enableButton="enableButton" buttonName="Novo Agente" @onSearch="searchValue" @onClick="isCreate" />
+
     <v-data-table :search="search" :headers="headers" :items="employees" :sort-by="[{ key: 'name', order: 'asc' }]"
-        class="elevation-1" >
+        class="elevation-1">
 
         <template v-slot:top>
 
             <v-divider class="mx-4" inset vertical></v-divider>
 
             <v-spacer></v-spacer>
-
 
             <v-dialog v-model="dialog" max-width="500px">
 
@@ -79,6 +77,7 @@
 export default {
     name: "EmployeesPage",
     data: () => ({
+        enableButton: true,
         search: "",
         dialog: false,
         dialogDelete: false,
@@ -112,11 +111,12 @@ export default {
         },
     },
     created() {
-        
+
         this.initialize();
     },
     methods: {
         isCreate() {
+            this.enableButton = false;
             this.dialog = true;
         },
         searchValue(event) {
@@ -165,6 +165,7 @@ export default {
             this.closeDelete();
         },
         close() {
+            this.enableButton = true;
             this.dialog = false;
             this.$nextTick(() => {
                 this.editedItem = Object.assign({}, this.defaultItem);
@@ -197,7 +198,6 @@ export default {
     bottom: 10px;
     z-index: 999;
 }
-.v-data-table-footer__items-per-page {
 
-}
+.v-data-table-footer__items-per-page {}
 </style>

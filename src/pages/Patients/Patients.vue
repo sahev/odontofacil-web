@@ -1,4 +1,5 @@
 <template>
+    <GlobalToolbar />
     <v-container class="text-center">
         lista pacientes
     </v-container>

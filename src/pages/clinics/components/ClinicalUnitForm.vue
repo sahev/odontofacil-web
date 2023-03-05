@@ -44,8 +44,8 @@
 			<v-btn color="error" variant="outlined" @click="cancelForm">
 				cancelar
 			</v-btn>
-			<v-btn color="success" variant="tonal" @click="onSave">
-				salvar
+			<v-btn color="success" variant="tonal" @click="onEdit">
+				{{ form.id == undefined ? 'próximo' : 'salvar'}}
 			</v-btn>
 		</v-card-actions>
 
@@ -54,13 +54,16 @@
 </template>
 <script>
 import { onMounted, ref } from 'vue'
+//import circularJSON from 'circular-json'
+//import { useLocalStorage } from '@/store/store';
+
 // import postsService from 'src/services/posts'
 
 // const { post, getById, update } = postsService()
 
 export default {
 	name: 'ClinicForm',
-	emits: ['updateDialog', 'onCancel'],
+	emits: ['onCancel', 'onSave'],
 	props: {
 		dialog: { type: Boolean, default: false },
 		selectedClinicalUnit: { type: Object, default: Object },
@@ -79,20 +82,21 @@ export default {
 			form.value = props.selectedClinicalUnit;
 		})
 
-		const onSave = () => {
-			console.log('save new clinical unit', form.value);
-			emit('updateDialog', false);
+		const onEdit = () => {
+			// console.log('edit',circularJSON.stringify(form.value));
+			// localStorage.setItem('clinicalUnit', form.value)
+			// useLocalStorage('clinicalUnit', circularJSON.stringify(form.value))
+			emit('onSave', 'horário de funcionamento');
 		}
 
 		const cancelForm = () => {
 			emit('onCancel', initialValue);
-			emit('updateDialog', false);
 		}
 
 		return {
 			form,
 			cancelForm,
-			onSave,
+			onEdit,
 		}
 	},
 	data: () => ({

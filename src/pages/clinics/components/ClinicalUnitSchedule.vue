@@ -18,7 +18,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="day in this.selectedClinicalUnit.workDays" :key="day.name">
+                            <tr v-for="day in (this.selectedClinicalUnit.workDays ?? defaultWorkDays)" :key="day.name">
                                 <td
                                     class="v-input v-input--density-default v-input--dirty v-checkbox v-input v-input--density-default v-input--dirty v-checkbox">
                                     <v-checkbox :label="day.name" v-model="day.enabled" color="primary">
@@ -43,6 +43,9 @@
                 <v-btn color="primary" variant="outlined" @click="setDefaultSchedule">
                     definir horário padrão
                 </v-btn>
+                <v-btn color="primary" variant="outlined" @click="onBack">
+                    voltar
+                </v-btn>
                 <v-btn color="error" variant="outlined" @click="onCancel">
                     cancelar
                 </v-btn>
@@ -54,33 +57,42 @@
     </v-row>
 </template>
 <script>
+import { useLocalStorage } from '@/store/store';
+
 export default {
-    emits: ['updateDialog','setDefaultWorkDays', 'onCancel'],
+    emits: ['setDefaultWorkDays', 'onCancel', 'onSave', 'onBack'],
     props: ['selectedClinicalUnitProp'],
     methods: {
+        onBack() {
+            this.$emit('onBack', 'dados principais');
+        },
         setDefaultSchedule() {
             this.$emit('setDefaultWorkDays', this.defaultWorkDays);
         },
         onCancel() {
-            this.$emit('updateDialog', false);
             this.$emit('onCancel', this.initialValue);
 
         },
         onSave() {
-            console.log('save workdays', this.selectedClinicalUnit.workDays, this.selectedClinicalUnit.id);
-            this.$emit('updateDialog', false);
+            // console.log('save workdays: recuperar localstorage, adicionar workdays nele, salvar na api, e remover posteriormente ', this.selectedClinicalUnit.workDays);
+            
+            let clinicalUnit = useLocalStorage('clinicalUnit')
+            
+            this.selectedClinicalUnit = clinicalUnit;
+
+            console.log(this.selectedClinicalUnit, 'salvandoaaa');
+            this.$emit('onSave', this.selectedClinicalUnit.workDays);
         }
     },
     created() {
         if (!this.selectedClinicalUnit.workDays) {
             this.selectedClinicalUnit.workDays = { ...this.defaultWorkDays };
-            // chamar endpoint de atualização de workdays passando o valor default
         }
     },
     data() {
         return {
             initialValue: { ...this.selectedClinicalUnitProp },
-            selectedClinicalUnit: this.selectedClinicalUnitProp ,
+            selectedClinicalUnit: this.selectedClinicalUnitProp ?? { workDays: this.defaultWorkDays },
             defaultWorkDays: [
                 {
                     name: 'Segunda',
